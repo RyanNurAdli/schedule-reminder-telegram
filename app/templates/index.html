@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="starter-template">
+    <h1>Daftar Sidang Jaksa pada CKN Bone di Lapariaja</h1>
+</div>
+<button type="button" data-toggle="modal" class="btn btn-lg btn-primary" data-target="#insert_book">Tambah Jadwal Sidang</button>
+
+<!-- Modal 1 for adding a book -->
+<div class="modal fade" id="insert_book" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Tambah Jadwal Sidang</h4>
+            </div>
+            <form action="{{url_for('tambah_sidang_jaksa')}}" method="post">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="author" class="col-xs-2 control-label">Nama Kasus</label>
+                        <div class="col-xs-10">
+                            <input type="text" id="nama_kasus" class="form-control" name="nama_kasus" placeholder="Nama Kasus" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="author" class="col-xs-2 control-label">Nama Terdakwa</label>
+                        <div class="col-xs-10">
+                            <input type="text" class="form-control" name="nama_terdakwa" placeholder="Nama Terdakwa" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="author" class="col-xs-2 control-label">Nama Jaksa</label>
+                        <div class="col-xs-10">
+                            <input type="number" class="form-control" name="nama_jaksa" placeholder="Nama Jaksa" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="author" class="col-xs-2 control-label">Waktu Sidang</label>
+                        <div class="col-xs-10">
+                            <input type="datetime-local" class="form-control" name="waktu_sidang" placeholder="Waktu Sidang" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="author" class="col-xs-2 control-label">Sidang Ke</label>
+                        <div class="col-xs-10">
+                            <input type="number" class="form-control" name="sidang_ke" placeholder="Sidang Ke" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Modal 1 -->
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table" border="1">
+            <thead>
+                <tr>
+                    <th>Nama Kasus</th>
+                    <th>Nama Terdakwa</th>
+                    <th>Nama Jaksa</th>
+                    <th>Waktu Sidang</th>
+                    <th>Sidang Ke</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for scheduleJaksa in ScheduleJaksa %}
+                <tr>
+                    <td>{{ scheduleJaksa.nama_kasus }}</td>
+                    <td>{{ scheduleJaksa.nama_terdakwa }}</td>
+                    <td>{{ scheduleJaksa.nama_jaksa }}</td>
+                    <td>{{ scheduleJaksa.waktu_sidang }}</td>
+                    <td>{{ scheduleJaksa.sidang_ke }}</td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal"
+                            data-target="#update_book_{{book['isbn']}}">Edit</button></td>
+
+
+                    <!-- Modal 2 for updating a book -->
+                    <div class="modal fade" id="edit_jadwal_sidang_{{edit_jadwal_sidang['id_kasus']}}" tabindex="-1" role="dialog"
+                        aria-labelledby="basicModal" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">Edit Jadwal Sidang</h4>
+                                </div>
+                                <form action="{{url_for('edit_jadwal_sidang', id_kasus=edit_jadwal_sidang['id_kasus'])}}" method="post">
+                                    <div class="modal-body">
+                                        <div class="form-group row">
+                                            <label for="author" class="col-xs-2 control-label">Nama Kasus</label>
+                                            <div class="col-xs-10">
+                                                <input type="text" id="author" class="form-control" name="nama_kasus"
+                                                    value="{{edit_jadwal_sidang['nama_kasus']}}" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="author" class="col-xs-2 control-label">Nama Terdakwa</label>
+                                            <div class="col-xs-10">
+                                                <input type="text" class="form-control" name="nama_terdakwa"
+                                                    value="{{edit_jadwal_sidang['nama_terdakwa']}}" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="author" class="col-xs-2 control-label">Nama Jaksa</label>
+                                            <div class="col-xs-10">
+                                                <input type="text" class="form-control" name="nama_jaksa"
+                                                    value="{{edit_jadwal_sidang['nama_jaksa']}}" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="author" class="col-xs-2 control-label">Waktu Sidang</label>
+                                            <div class="col-xs-10">
+                                                <input type="datetime-local" class="form-control" name="waktu_sidang"
+                                                    value="{{edit_jadwal_sidang['waktu_sidang']}}" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="author" class="col-xs-2 control-label">Sidang Ke</label>
+                                            <div class="col-xs-10">
+                                                <input type="number" class="form-control" name="sidang_ke"
+                                                    value="{{edit_jadwal_sidang['sidang_ke']}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Modal 2 -->
+                    <td><button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target="#delete_book_{{['isbn']}}">Delete</button></td>
+
+
+<!--                    &lt;!&ndash; Modal 3 for deleting a book &ndash;&gt;-->
+<!--                    <div class="modal fade" id="delete_book_{{book['isbn']}}" tabindex="-1" role="dialog"-->
+<!--                        aria-labelledby="basicModal" aria-hidden="true">-->
+<!--                        <div class="modal-dialog">-->
+<!--                            <div class="modal-content">-->
+<!--                                <div class="modal-header">-->
+<!--                                    <button type="button" class="close" data-dismiss="modal"-->
+<!--                                        aria-hidden="true">&times;</button>-->
+<!--                                    <h4 class="modal-title" id="myModalLabel">Delete a book</h4>-->
+<!--                                </div>-->
+<!--                                <form action="{{url_for('delete', isbn=book['isbn'])}}" method="post">-->
+<!--                                    <div class="modal-body">-->
+<!--                                        <div class="form-group row">-->
+<!--                                            <label class="col-sm-12 col-form-label">Do you want to delete the book <span-->
+<!--                                                    style='font-weight:bold;color:red'>{{book['title']}}</span>-->
+<!--                                                ?</label>-->
+
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="modal-footer">-->
+<!--                                        <button type="button" class="btn btn-default"-->
+<!--                                            data-dismiss="modal">Close</button>-->
+<!--                                        <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--                                    </div>-->
+<!--                                </form>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <!-- End Modal 3-->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
